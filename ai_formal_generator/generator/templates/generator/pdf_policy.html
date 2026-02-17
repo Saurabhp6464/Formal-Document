@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Times New Roman', serif;
+            font-size: 12pt;
+            line-height: 1.6;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header-line {
+            font-weight: bold;
+            margin: 5px 0;
+            font-size: 13pt;
+        }
+        .policy-title {
+            font-weight: bold;
+            font-size: 18pt;
+            margin: 20px 0;
+            text-align: center;
+            text-decoration: underline;
+        }
+        .date-section {
+            text-align: right;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .subject-section {
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .body-content {
+            text-align: justify;
+            margin: 30px 0;
+            white-space: pre-wrap;
+            line-height: 1.8;
+        }
+        .from-section {
+            text-align: right;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .to-section {
+            margin: 20px 0;
+        }
+        .to-label {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .recipient {
+            margin-left: 20px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        {% for line in header %}
+        <div class="header-line">{{ line }}</div>
+        {% endfor %}
+    </div>
+
+    <div class="policy-title">
+        {% if language == 'hi' %}नीति{% else %}POLICY{% endif %}
+    </div>
+
+    <div class="date-section">
+        <strong>{% if language == 'hi' %}दिनांक:{% else %}Date:{% endif %}</strong> {{ date }}
+    </div>
+
+    <div class="subject-section">
+        <strong>{% if language == 'hi' %}विषय:{% else %}Subject:{% endif %}</strong> {{ subject }}
+    </div>
+
+    <div class="body-content">{{ body }}</div>
+
+    <div class="from-section">
+        {{ from }}
+    </div>
+
+    <div class="to-section">
+        <div class="to-label">
+            <strong>{% if language == 'hi' %}प्रति:{% else %}To:{% endif %}</strong>
+        </div>
+        {% if to_list %}
+            {% for recipient in to_list %}
+            <div class="recipient">{{ recipient }}</div>
+            {% endfor %}
+        {% else %}
+            <div class="recipient">{{ to }}</div>
+        {% endif %}
+    </div>
+</body>
+</html>

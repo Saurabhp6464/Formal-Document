@@ -1,0 +1,53 @@
+{
+  "document_type": "Policy",
+  "title_en": "POLICY DOCUMENT",
+  "title_hi": "नीति दस्तावेज़",
+
+  "header": {
+    "en": [
+      "Bhaskaracharya National Institute for Space Applications and Geo-informatics (BISAG-N)",
+      "Ministry of Electronics and Information Technology (MeitY)",
+      "Government of India"
+    ],
+    "hi": [
+      "भास्करचार्य राष्ट्रीय अंतरिक्ष अनुप्रयोग एवं भू-सूचना विज्ञान संस्थान (बायसेग-एन)",
+      "इलेक्ट्रॉनिक्स और सूचना प्रौद्योगिकी मंत्रालय (MeitY)",
+      "भारत सरकार"
+    ]
+  },
+
+  "footer": {
+    "en": {
+      "designation": "Director – Standardization",
+      "organization": "BISAG-N"
+    },
+    "hi": {
+      "designation": "निदेशक – मानकीकरण",
+      "organization": "बायसेग-एन"
+    }
+  },
+
+  "recipients": {
+    "en": [
+      "Directors",
+      "Additional Directors",
+      "Project Directors",
+      "Assistant Project Directors",
+      "Project Managers"
+    ],
+    "hi": [
+      "निदेशक",
+      "अतिरिक्त निदेशक",
+      "परियोजना निदेशक",
+      "सहायक परियोजना निदेशक",
+      "परियोजना प्रबंधक"
+    ]
+  },
+
+  "show_date": true,
+  "show_subject": true,
+  "show_body": true,
+  "show_signature": true,
+  "show_to": true,
+  "show_attached": true
+}

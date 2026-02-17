@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Policy Generator - BISAG-N</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .form-container { 
+            max-width: 900px; 
+            margin: 30px auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.1); 
+        }
+        .header-title { 
+            color: #0056b3; 
+            border-bottom: 3px solid #0056b3; 
+            padding-bottom: 10px; 
+            margin-bottom: 30px; 
+        }
+        .back-btn {
+            margin-bottom: 20px;
+        }
+        .collapsible-section {
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .collapsible-header {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        .collapsible-header:hover {
+            background: #e9ecef;
+        }
+        .collapsible-header .arrow {
+            transition: transform 0.3s;
+        }
+        .collapsible-header.expanded .arrow {
+            transform: rotate(90deg);
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .collapsible-content.expanded {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 15px;
+            background: #fafafa;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+
+<a href="{% url 'home' %}" class="btn btn-secondary back-btn">← Back to Home</a>
+
+<h3 class="text-center header-title">📋 BISAG-N Policy Generator</h3>
+
+<form method="POST" action="{% url 'result_policy' %}">
+{% csrf_token %}
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <label class="form-label fw-bold">Language / भाषा</label>
+        <select name="language" id="language" class="form-select" required>
+            <option value="">-- Select Language --</option>
+            <option value="en">English</option>
+            <option value="hi">हिंदी (Hindi)</option>
+        </select>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label fw-bold">Date / दिनांक</label>
+        <input type="date" name="date" class="form-control" required>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label class="form-label fw-bold">From (Position) / से (पद)</label>
+    <select name="from_position" class="form-select" required>
+        <option value="">-- Select Position --</option>
+        {% for designation in designations %}
+        <option value="{{ designation }}">{{ designation }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<!-- To Section - Collapsible -->
+<div class="collapsible-section mb-3">
+    <div class="collapsible-header" onclick="toggleCollapse('policy_to_content')">
+        <span>To (Recipients) / प्रति (प्राप्तकर्ता)</span>
+        <span class="arrow">▶</span>
+    </div>
+    <div id="policy_to_content" class="collapsible-content">
+        {% for designation in designations %}
+        <div class="form-check mb-2">
+            <input type="checkbox" name="to_recipients[]" value="{{ designation }}" class="form-check-input">
+            <label class="form-check-label">{{ designation }}</label>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="mb-3">
+    <label class="form-label fw-bold">Subject / विषय</label>
+    <input type="text" name="subject" id="subject" class="form-control" 
+           placeholder="Enter subject..." required>
+</div>
+
+<div class="mb-3">
+    <label class="form-label fw-bold">Body Prompt / सामग्री संकेत</label>
+    <textarea name="body_prompt" id="body_prompt" class="form-control" rows="3" 
+              placeholder="Enter instructions or topic for AI to generate policy content..."></textarea>
+    <button type="button" class="btn btn-sm btn-info mt-2" onclick="generateBody()">
+        🤖 Generate Body with AI 
+    </button>
+</div>
+
+<div class="mb-3">
+    <label class="form-label fw-bold">Policy Content / नीति सामग्री</label>
+    <textarea name="body" id="body" class="form-control" rows="12" 
+              placeholder="AI generated content will appear here or type manually..." required></textarea>
+</div>
+
+<div class="text-center mt-4">
+    <button type="submit" class="btn btn-primary btn-lg px-5">
+        👁️ Preview Policy
+    </button>
+</div>
+
+</form>
+</div>
+
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function toggleCollapse(id) {
+    const content = document.getElementById(id);
+    const header = content.previousElementSibling;
+    
+    if (content.classList.contains('expanded')) {
+        content.classList.remove('expanded');
+        header.classList.remove('expanded');
+    } else {
+        content.classList.add('expanded');
+        header.classList.add('expanded');
+    }
+}
+
+function generateBody() {
+    const prompt = document.getElementById('body_prompt').value;
+    const lang = document.getElementById('language').value;
+    
+    if (!prompt || !lang) {
+        alert('Please select language and enter prompt first!');
+        return;
+    }
+    
+    const bodyTextarea = document.getElementById('body');
+    bodyTextarea.value = 'Generating... Please wait...';
+    
+    const formData = new FormData();
+    formData.append('body_prompt', prompt);
+    formData.append('language', lang);
+    
+    const csrftoken = getCookie('csrftoken');
+    
+    fetch("{% url 'generate_policy_body' %}", {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken
+        },
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(text => {
+        bodyTextarea.value = text;
+    })
+    .catch(err => {
+        bodyTextarea.value = '';
+        alert('Error generating body: ' + err);
+        console.error('Error:', err);
+    });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+from django.contrib import admin
+from .models import DocumentLog, OfficeOrderCounter
+
+@admin.register(DocumentLog)
+class DocumentLogAdmin(admin.ModelAdmin):
+    list_display = ("document_type", "language", "reference_id", "created_at")
+    search_fields = ("reference_id", "content")
+    list_filter = ("document_type", "language", "created_at")
+
+
+@admin.register(OfficeOrderCounter)
+class OfficeOrderCounterAdmin(admin.ModelAdmin):
+    list_display = ("year", "counter")
+    search_fields = ("year",)
+    ordering = ("-year",)
