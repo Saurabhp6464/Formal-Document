@@ -139,7 +139,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
-
-# GEMINI_API_KEY="AIzaSyAd0oH3bwqFAFFZJM6ZlsYaA1nVIg-gPLk"
-#VEDANT_API
-GEMINI_API_KEY="AIzaSyCa2klu9ecvzl3N1h7hwI2Vhe9oeApqjpU"
